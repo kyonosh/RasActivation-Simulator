@@ -16,7 +16,7 @@ begin molecule types
     Ras(lig~0~SOS,a~p~0)
 end molecule types
 
-begin species9
+begin species
    Ras(lig~0,a~0) Ras0 #initial # of unbound RasGDP molecules
 end species
 
