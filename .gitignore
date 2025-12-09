@@ -4,3 +4,5 @@ Model*/**/*.gdat
 Model*/**/*.cdat
 Model*/**/*.net
 Model*/**/*.log
+*.pkl
+*_sbml.xml
