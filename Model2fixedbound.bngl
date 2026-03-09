@@ -1,14 +1,16 @@
-# MODEL 2 
+# MODEL 2 fixed bound
 
 # Ras-SOS Activation Model 2 
 # altered parameters for multimodality 
 # increased Kcat2 and decreased Koff1 
 
+# no binding / unbinding 
+
 
 begin model
 
 begin parameters
-    RhoSOS 30             # nM # initial RhoSOS parameter for scanning
+    RhoSOS 1              # nM # initial RhoSOS parameter for scanning
     
     Kon1 7e-8* RhoSOS           # sos binding to RasGDP 
     Kon2 7e-8* RhoSOS             # sos binding to RasGTP 
@@ -54,8 +56,8 @@ begin reaction rules
     RasPhos:        Ras(sos,a~0) + Ras(sos!1).Sos(ras!1) -> Ras(sos,a~p) + Ras(sos!1).Sos(ras!1) Kcat1
     RasDephos:      Ras(sos,a~p) -> Ras(sos,a~0) Kcat2
 
-    SosGDPbinding:  Ras(sos,a~0) <-> Ras(sos!1,a~0).Sos(ras!1) Kon1,Koff1
-    SosGTPbinding:  Ras(sos,a~p) <-> Ras(sos!1,a~p).Sos(ras!1) Kon2,Koff2
+    #SosGDPbinding:  Ras(sos,a~0) <-> Ras(sos!1,a~0).Sos(ras!1) Kon1,Koff1
+    #SosGTPbinding:  Ras(sos,a~p) <-> Ras(sos!1,a~p).Sos(ras!1) Kon2,Koff2
 end reaction rules
 
 end model

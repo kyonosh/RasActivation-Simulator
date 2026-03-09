@@ -8,12 +8,12 @@
 begin model
 
 begin parameters
-    RhoSOS 1              # nM # initial RhoSOS parameter for scanning
+    RhoSOS 15              # nM # initial RhoSOS parameter for scanning
     
     Kon1 7e-8* RhoSOS           # sos binding to RasGDP 
     Kon2 7e-8* RhoSOS             # sos binding to RasGTP 
     
-    Koff1 1e-4            # Dissociation rate for RasGDP·SOS  # initial Koff1 parameter in Model 1 = 5e-3 
+    Koff1 5e-3            # Dissociation rate for RasGDP·SOS  # initial Koff1 parameter in Model 1 = 5e-3 
     Koff2 5e-4            # Dissociation rate for RasGTP·SOS 
     
     Kcat1 1e-2 / A        # Catalytic rate for RasGDP -> RasGTP

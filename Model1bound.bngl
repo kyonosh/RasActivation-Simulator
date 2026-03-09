@@ -7,7 +7,7 @@
 begin model
 
 begin parameters
-    RhoSOS 1              # nM # initial RhoSOS parameter for scanning
+    RhoSOS 10              # nM # initial RhoSOS parameter for scanning
     
     Kon1 7e-8* RhoSOS           # sos binding to RasGDP 
     Kon2 7e-8* RhoSOS             # sos binding to RasGTP 
