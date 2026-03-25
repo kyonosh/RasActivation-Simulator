@@ -1,0 +1,78 @@
+# MODEL 1 - with LAT 
+# SOS has to bind to LAT before activating Ras 
+# LAT density controls how much processive/bound SOS is available
+
+begin model
+
+begin parameters
+
+    RhoSOS  1             # SOS  concentration (nM)
+    RhoLAT  500           # LAT surface density (molecules/µm²)
+
+    # SOS-LAT recruitment
+    # Higher RhoLAT = more SOS gets recruited = more Ras activation
+    Kon_LAT   1e-4        # SOS binding to LAT (µm2/s)
+    Koff_LAT  1e-3        # SOS unbinding LAT , what's controlling processivity now 
+                          
+
+    # SOS-Ras binding (same but now only SOS bound to LAT can bind Ras)
+    Kon1  7e-8 * RhoSOS
+    Kon2  7e-8 * RhoSOS
+    Koff1 5e-3
+    Koff2 5e-4
+
+    Kcat1 1e-2 / A
+    Kcat2 2.5e-3
+
+    A        1
+    RasTotal 1000 * A
+
+end parameters
+
+begin molecule types
+    Ras(sos,a~p~0)
+    Sos(ras,lat)          
+    LAT(sos)              
+end molecule types
+
+begin species
+    Ras(sos,a~0)           RasTotal    # all RasGDP initially
+    LAT(sos)               RhoLAT      # LAT on membrane, initially unbound
+    Sos(ras,lat)        RhoSOS
+end species
+
+begin observables
+    Molecules totalRasGTP   Ras(a~p)
+    Molecules TotalRas      Ras()
+    Molecules boundRasGTP   Ras(sos!1,a~p).Sos(ras!1)
+    Molecules boundRasGDP   Ras(sos!1,a~0).Sos(ras!1)
+    Molecules unboundRasGTP Ras(sos,a~p)
+    Molecules unboundRasGDP Ras(sos,a~0)
+    Molecules SOS_on_LAT    Sos(lat!1).LAT(sos!1)   # recruited SOS
+    Molecules LAT_free      LAT(sos)                 # available LAT
+end observables
+
+begin functions
+    activatedRasGTP() totalRasGTP / TotalRas
+end functions
+
+begin reaction rules
+
+    
+    SOS_LAT_binding:  Sos(lat) + LAT(sos) <-> Sos(lat!1).LAT(sos!1)   Kon_LAT, Koff_LAT
+
+    # Only LAT-bound SOS can bind Ras 
+    SosGDPbinding:  Sos(ras,lat!1).LAT(sos!1) + Ras(sos,a~0) <-> Sos(ras!2,lat!1).LAT(sos!1).Ras(sos!2,a~0)   Kon1, Koff1
+
+    SosGTPbinding:  Sos(ras,lat!1).LAT(sos!1) + Ras(sos,a~p) <-> Sos(ras!2,lat!1).LAT(sos!1).Ras(sos!2,a~p)   Kon2, Koff2
+    
+    
+    RasPhos:   Ras(sos,a~0) + Ras(sos!1).Sos(ras!1) -> Ras(sos,a~p) + Ras(sos!1).Sos(ras!1)   Kcat1
+    RasDephos: Ras(sos,a~p) -> Ras(sos,a~0)   Kcat2
+
+end reaction rules
+
+end model
+
+generate_network()
+simulate({method=>"ssa", t_end=>1000000, n_steps=>100000, print_functions=>1})
