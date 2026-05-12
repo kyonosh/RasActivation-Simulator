@@ -3,7 +3,7 @@
 begin model
 
 begin parameters
-    RhoSOS 1              # nM # initial RhoSOS parameter for scanning
+    RhoSOS 10              # nM # initial RhoSOS parameter for scanning
     
     Kon1 7e-5* RhoSOS           # sos binding to RasGDP  # INCREASED 
     Kon2 7e-5* RhoSOS             # sos binding to RasGTP   # INCREASED
@@ -31,7 +31,7 @@ end species
 begin observables
     Molecules boundRasGTP Ras(sos!1,a~p).Sos(ras!1)
     Molecules boundRasGDP Ras(sos!1,a~0).Sos(ras!1)
-    Molecules totalBoundSOS Ras(sos!1).Sos(ras!1)
+    Molecules totalBoundRas Ras(sos!1).Sos(ras!1)
     Molecules unboundRasGTP Ras(sos,a~p)
     Molecules unboundRasGDP Ras(sos,a~0)
     Molecules totalRasGTP Ras(a~p)
