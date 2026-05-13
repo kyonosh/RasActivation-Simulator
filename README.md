@@ -143,7 +143,7 @@ conda install -c conda-forge bionetgen
 
 If you use this code, please cite:
 
-> Yonosh, K.A. & Faeder, J.R. Mathematical modeling predicts quantization of Ras activation in membrane corrals. *npj Systems Biology and Applications* (2025).
+> Yonosh, K.A. & Faeder, J.R. Mathematical modeling predicts quantization of Ras activation in membrane corrals. 
 
 ---
 
