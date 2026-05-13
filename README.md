@@ -1,16 +1,153 @@
 # RasActivation-Simulator
 
-Repository for "Mathematical modeling predicts quantization of Ras activation in membrane corrals". This repository stores the BioNetGen files and Python Jupyter notebooks used to model and analyze the stochastic Ras-SOS activation-deactivation studied in the paper. 
-
-
-Code and analysis for:
-
-> **Mathematical modeling predicts quantization of Ras activation in membrane corrals**  
-> Katherine A. Yonosh & James R. Faeder 
+Repository for **"Mathematical modeling predicts quantization of Ras activation in membrane corrals"**  
+Katherine A. Yonosh & James R. Faeder  
+Department of Computational and Systems Biology, University of Pittsburgh
 
 ---
 
 ## Overview
 
-We implement a rule-based stochastic model of processive Ras activation within micron-scale membrane corrals and introduce a minimal activator–target framework (Box 1) that predicts quantized RasGTP distributions from kinetic parameters. Three parameter sets (Models 1–3) test distinct regimes of quantization.
+This repository contains BioNetGen models and Python/Jupyter notebooks used to simulate and analyze stochastic Ras–SOS activation. Three parameter regimes (Models 1–3) explore varying SOS processivity and resulting signaling quantization. A general activator–target framework (Box 1 in the manuscript) provides analytical predictions for conditional peak positions that are validated across all models.
 
+---
+
+## Repository Structure
+
+```
+RasActivation-Simulator/
+├── Model1.bngl                  # Baseline Lee et al. parameters (processive, bimodal)
+├── Model2.bngl                  # 10× higher kcat2, higher SOS (processive, multimodal)
+├── Model3-1.bngl                # 1000× faster kon/koff (non-processive, unimodal)
+├── 01_run_simulation.ipynb      # Run SSA trajectories and save to .pkl
+├── 02_plot_simulation.ipynb     # Plot time courses and distributions 
+├── 03_quantized_analysis.ipynb  # Box 1 framework validation, manuscript figure generation, and peak analysis
+└── README.md
+```
+
+---
+
+## Models
+
+| Model | Description | Key change from Model 1 | Expected output |
+|-------|-------------|--------------------------|-----------------|
+| Model 1 | Lee et al. baseline | — | Apparent bimodal |
+| Model 2 | Faster RasGAP, higher SOS | `Kcat2` × 10, `[SOS]` up to 30 nM | Resolved multimodal |
+| Model 3 | Non-processive SOS | `Kon`/`Koff` × 1000 | Unimodal |
+
+All models share the same reaction rules: reversible SOS binding to RasGDP or RasGTP, catalytic exchange (RasGDP → RasGTP) by membrane-bound SOS, and RasGAP-mediated hydrolysis (RasGTP → RasGDP).
+
+---
+
+## Notebooks
+
+### `01_run_simulation.ipynb`
+Runs Gillespie SSA trajectories for a chosen model across a range of SOS concentrations and saves results to `<MODEL>_traj.pkl`.
+
+- Set `MODEL = "Model1"`, `"Model2"`, or `"Model3"` at the top
+- Outputs: `Model1_traj.pkl`, `Model2_traj.pkl`, `Model3_traj.pkl`
+- Default: `t_end = 100,000 s`, `n_steps = 10,000` output points
+
+### `02_plot_simulation.ipynb`
+Loads a `.pkl` trajectory file and generates four plots:
+
+- **A** — Time-course trajectories (RasGTP + Bound SOS)  
+- **B** — RasGTP count distributions  
+- **C** — SOS occupancy distributions  
+- **D** — RasGTP distributions conditioned on SOS occupancy state  
+
+### `03_quantized_analysis.ipynb`
+Validates the Box 1 activator–target framework against simulation results:
+
+- Computes predicted conditional peak positions ⟨T\*⟩ₙ from kinetic parameters
+- Generates the 4-panel manuscript figure (2-4) 
+- Compares SSA peak modes to analytical predictions 
+- Simulates conditional RasGTP distributions at fixed n 
+- Runs bifurcation scans (forward and backward) using CVODE to verify absence of bistability
+
+---
+
+## Quickstart
+
+### 1. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+BioNetGen must also be installed separately (see below).
+
+### 2. Run a simulation
+
+Open `01_run_simulation.ipynb`, set `MODEL = "Model1"` (or 2/3), and run all cells. This produces `Model1_traj.pkl`.
+
+### 3. Plot results
+
+Open `02_plot_simulation.ipynb`, set `MODEL = "Model1"`, and run all cells.
+
+### 4. Framework analysis
+
+Open `03_quantized_analysis.ipynb`, set `MODEL` and matching `RhoSOS` concentration, and run all cells to reproduce the manuscript figures and peak-position comparison table.
+
+---
+
+## Dependencies
+
+See `requirements.txt` for the full Python package list. Key dependencies:
+
+- **[BioNetGen](https://bionetgen.org/)** —  install separately and ensure `bionetgen` is on your PATH  
+- **bionetgen** (Python package) — Python interface to BioNetGen  
+- **numpy**, **matplotlib**, **pickle** — simulation and plotting  
+
+### Installing BioNetGen
+
+```bash
+# Via conda (recommended)
+conda install -c conda-forge bionetgen
+
+# Or download directly from https://bionetgen.org/
+```
+
+---
+
+## Parameter Reference
+
+| Parameter | Model 1 | Model 2 | Model 3 | Description |
+|-----------|---------|---------|---------|-------------|
+| `RhoSOS` | 1–10 nM | 1–30 nM | 1–10 nM | Initial SOS concentration |
+| `Kon1` | 7×10⁻⁸ × RhoSOS | same | 7×10⁻⁵ × RhoSOS | SOS binding RasGDP |
+| `Kon2` | 7×10⁻⁸ × RhoSOS | same | 7×10⁻⁵ × RhoSOS | SOS binding RasGTP |
+| `Koff1` | 5×10⁻³ s⁻¹ | same | 5 s⁻¹ | SOS unbinding RasGDP |
+| `Koff2` | 5×10⁻⁴ s⁻¹ | same | 0.5 s⁻¹ | SOS unbinding RasGTP |
+| `Kcat1` | 1×10⁻² μm²s⁻¹/A | same | same | RasGDP → RasGTP |
+| `Kcat2` | 2.5×10⁻³ s⁻¹ | 2.5×10⁻² s⁻¹ | same as M1 | RasGTP → RasGDP |
+| `A` | 1 μm² | same | same | Corral area |
+| `RasTotal` | 1000 | same | same | Total Ras molecules |
+
+---
+
+## Output Files
+
+| File | Generated by | Contents |
+|------|-------------|----------|
+| `Model1_traj.pkl` | `01_run_simulation` | Dict with model name, SOS concentrations, and trajectory arrays |
+| `Model2_traj.pkl` | `01_run_simulation` | Same, Model 2 parameters |
+| `Model3_traj.pkl` | `01_run_simulation` | Same, Model 3 parameters |
+| `Model1figure.png` | `03_quantized_analysis` | 4-panel manuscript figure |
+| `Model2figure.png` | `03_quantized_analysis` | 4-panel manuscript figure |
+| `Model3figure.png` | `03_quantized_analysis` | 4-panel manuscript figure |
+
+---
+
+## Citation
+
+If you use this code, please cite:
+
+> Yonosh, K.A. & Faeder, J.R. Mathematical modeling predicts quantization of Ras activation in membrane corrals. *npj Systems Biology and Applications* (2025).
+
+---
+
+## Contact
+
+James R. Faeder — faeder@pitt.edu  
+Department of Computational and Systems Biology, University of Pittsburgh
