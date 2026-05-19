@@ -12,6 +12,9 @@ bionetgen>=0.8.4
 # Numerics
 numpy>=1.26.0
 
+# Statistical distributions 
+scipy>=1.16.0
+
 # Plotting
 matplotlib>=3.10.0
 

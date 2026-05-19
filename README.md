@@ -22,6 +22,8 @@ RasActivation-Simulator/
 ├── 01_run_simulation.ipynb      # Run SSA trajectories and save to .pkl
 ├── 02_plot_simulation.ipynb     # Plot time courses and distributions 
 ├── 03_quantized_analysis.ipynb  # Box 1 framework validation, manuscript figure generation, and peak analysis
+├───04_supplemental_analysis.ipynb  # figure generation, positive feedback and bifurcation analysis
+├── activator-target.ipynb             # Minimal model demonstration with analytical predictions (Fig. S5)
 └── README.md
 ```
 
@@ -63,7 +65,20 @@ Validates the Box 1 activator–target framework against simulation results:
 - Generates the 4-panel manuscript figure (2-4) 
 - Compares SSA peak modes to analytical predictions 
 - Simulates conditional RasGTP distributions at fixed n 
-- Runs bifurcation scans (forward and backward) using CVODE to verify absence of bistability
+
+### `04_supplemental_analysis.ipynb`
+Explores  role of positive feedback and confirms the absence of bistability.
+
+- Supplemental Figures S1–S3 — Full time-course and distribution panels across all SOS concentrations for each model
+- Bifurcation Analysis (Fig. S4) — Forward and backward steady-state scans using CVODE for all three models, confirming no bistability
+- Eliminating Positive Feedback — Simulations with Koff1 = Koff2 (no feedback) for Models 1, 2, and 3. 
+- Mean-Field Analysis for Model 3 — Compares the mean-field prediction computed without positive feedback to the simulation-derived mean
+- Increasing Positive Feedback (Model 2) — varies Koff2 to show that stronger feedback increases the weight of higher SOS occupancy states without changing the quantized peak positions themselves 
+
+### 'activator_target.ipynb'
+
+A self-contained demonstration of the Box 1 activator–target framework, completely independent of the Ras/SOS models (no BioNetGen required). Implements the minimal two-layer cascade using a direct Gillespie SSA and validates it against the analytical Poisson-binomial mixture prediction. Produces Fig. S5 in the manuscript.
+
 
 ---
 
@@ -89,7 +104,11 @@ Open `02_plot_simulation.ipynb`, set `MODEL = "Model1"`, and run all cells.
 
 Open `03_quantized_analysis.ipynb`, set `MODEL` and matching `RhoSOS` concentration, and run all cells to reproduce the manuscript figures and peak-position comparison table.
 
----
+### 4. Positive feedback and bifurcation analysis
+
+Open 04_positive_feedback_analysis.ipynb. Each section is self-contained and documents which model and parameter modifications it applies.
+
+
 
 ## Dependencies
 
