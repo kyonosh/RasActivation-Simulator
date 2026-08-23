@@ -8,7 +8,7 @@ Department of Computational and Systems Biology, University of Pittsburgh
 
 ## Overview
 
-This repository contains BioNetGen models and Python/Jupyter notebooks used to simulate and analyze stochastic Ras–SOS activation. Three parameter regimes (Models 1–3) explore varying SOS processivity and resulting signaling quantization. A general activator–target framework (Box 1 in the manuscript) provides analytical predictions for conditional peak positions that are validated across all models.
+This repository contains BioNetGen models and Python/Jupyter notebooks used to simulate and analyze stochastic Ras–SOS activation. Three parameter regimes (Models 1–3) explore varying SOS processivity and resulting signaling quantization. A general activator–target framework provides analytical predictions for conditional peak positions that are validated across all models.
 
 ---
 
@@ -59,7 +59,7 @@ Loads a `.pkl` trajectory file and generates four plots:
 - **D** — RasGTP distributions conditioned on SOS occupancy state  
 
 ### `03_quantized_analysis.ipynb`
-Validates the Box 1 activator–target framework against simulation results:
+Validates the activator–target framework against simulation results:
 
 - Computes predicted conditional peak positions ⟨T\*⟩ₙ from kinetic parameters
 - Generates the 4-panel manuscript figure (2-4) 
