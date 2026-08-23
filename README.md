@@ -1,6 +1,6 @@
 # RasActivation-Simulator
 
-Repository for **"Mathematical modeling predicts quantization of Ras activation in membrane corrals"**  
+Repository for **"Mathematical modeling of processive Ras activation by SOS reveals a general mechanism for digital signaling"**  
 Katherine A. Yonosh & James R. Faeder  
 Department of Computational and Systems Biology, University of Pittsburgh
 
@@ -162,11 +162,12 @@ conda install -c conda-forge bionetgen
 
 If you use this code, please cite:
 
-> Yonosh, K.A. & Faeder, J.R. Mathematical modeling predicts quantization of Ras activation in membrane corrals. 
+> Yonosh, K.A. & Faeder, J.R. Mathematical modeling of processive Ras activation by SOS reveals a general mechanism for digital signaling
 
 ---
 
 ## Contact
 
+Katherine A. Yonosh - kay89@pitt.edu
 James R. Faeder — faeder@pitt.edu  
 Department of Computational and Systems Biology, University of Pittsburgh
